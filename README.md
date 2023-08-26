@@ -8,7 +8,7 @@ Initiative Tracker (Prototype Done)
 
 Tavern Generator (Prototype Done)
 
-NPC Generator
+NPC Generator (in progress)
 
 Loot Generator
 
