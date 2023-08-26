@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiative Tracker</title>
+    <style>
+        .order {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        body {
+            background-color: #E9F5DB;
+        }
+
+        #heading {
+            background-color: #718355;
+            color: #1E1E24;
+            padding: 30px 30px;
+            text-align: center;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+
+
+        .screen {
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: center;
+            align-content: center;
+            flex-flow: column wrap;
+            background-color: #97A97C;
+            color: #1E1E24;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+    </style>
+</head>
+<body>
+    <h1 id="heading">Initiative Tracker</h1>
+    <form id="initiativeForm">
+        <label for="characterName">Character Name:</label>
+        <input type="text" id="characterName" required>
+        <label for="initiative">Initiative:</label>
+        <input type="number" id="initiative" required>
+
+        <label for="playerCharacter">Player Character:</label>
+        <input type="checkbox" id="playerCharacter">
+        <label for="npc">NPC:</label>
+        <input type="checkbox" id="npc">
+        <p class="error" id="errorMessage"></p>
+
+        <div id="npcHPForm" style="display: none;">
+            <label for="npcHP">HP:</label>
+            <input type="number" id="npcHP">
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+    <div class="order" id="orderList"></div>
+
+    <script>const form = document.getElementById('initiativeForm');
+        const orderList = document.getElementById('orderList');
+        const playerCharacterCheckbox = document.getElementById('playerCharacter');
+        const npcCheckbox = document.getElementById('npc');
+        const npcHPForm = document.getElementById('npcHPForm');
+        const npcHPInput = document.getElementById('npcHP');
+        const errorMessage = document.getElementById('errorMessage');
+        const submissions = [];
+
+        npcCheckbox.addEventListener('change', function () {
+            if (npcCheckbox.checked) {
+                npcHPForm.style.display = 'block';
+            } else {
+                npcHPForm.style.display = 'none';
+            }
+        });
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const characterName = document.getElementById('characterName').value;
+            const initiative = parseInt(document.getElementById('initiative').value);
+            const isPlayerCharacter = playerCharacterCheckbox.checked;
+            const isNPC = npcCheckbox.checked;
+            const hp = isNPC ? parseInt(npcHPInput.value) : null;
+
+            if (isPlayerCharacter && isNPC) {
+                errorMessage.textContent = "Please only select one box.";
+                return;
+            } else {
+                errorMessage.textContent = "";
+            }
+
+            submissions.push({ characterName, initiative, isPlayerCharacter, isNPC, hp });
+            submissions.sort((a, b) => b.initiative - a.initiative);
+
+            displayOrderList();
+        });
+
+        function displayOrderList() {
+            orderList.innerHTML = '';
+            for (const submission of submissions) {
+                const entry = document.createElement('div');
+                entry.textContent = `${submission.characterName}: ${submission.initiative}`;
+
+                if (submission.isPlayerCharacter) {
+                    entry.style.color = 'blue';
+                } else if (submission.isNPC) {
+                    entry.style.color = 'red';
+                    entry.textContent += ` (HP: ${submission.hp})`;
+
+                    entry.addEventListener('click', function () {
+                        const newHP = prompt(`Enter new HP for ${submission.characterName}:`, submission.hp);
+                        if (newHP !== null) {
+                            submission.hp = parseInt(newHP);
+                            displayOrderList();
+                        }
+                    });
+                }
+
+                orderList.appendChild(entry);
+            }
+        }</script>
+</body>
+</html>
