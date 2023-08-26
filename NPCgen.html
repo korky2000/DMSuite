@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #raceContainer {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        #generateForm {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .name-with-desc {
+            margin-bottom: 10px;
+        }
+
+        #namePlace {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #7389AE;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        body {
+            background-color: #E9F5DB;
+        }
+
+        #heading {
+            background-color: #718355;
+            color: #1E1E24;
+            padding: 30px 30px;
+            text-align: center;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        .name-with-desc {
+            background-color: #718355;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            padding: 10px 10px;
+            display: inline-block;
+        }
+        .center {
+            padding: 30px 30px;
+            text-align: center;
+        }
+        .name-container ul {
+            padding-left: 0;
+            text-align: center;
+        }
+
+            .name-container ul li {
+                list-style-position: inside;
+                display: inline-block;
+                margin-right: 10px; 
+            }
+       
+
+    </style>
+</head>
+<body>
+    <h1 id="heading">Name Generator</h1>
+    <div id="raceContainer">
+        <label for="human">Human:</label>
+        <input type="checkbox" id="human">
+        <label for="elf">Elf:</label>
+        <input type="checkbox" id="elf">
+        <label for="dwarf">Dwarf:</label>
+        <input type="checkbox" id="dwarf">
+        <label for="generateDesc">Generate Description:</label>
+        <input type="checkbox" id="generateDesc">
+    </div>
+    <div id="generateForm">
+        <label for="numNames">Number of Names (1-10):</label>
+        <select id="numNames">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+        <button id="generateButton">Generate Names</button>
+    </div>
+    <div class="center">
+        <div id="namePlace" class="name-container"></div>
+    </div>
+
+    <script>const humanCheckbox = document.getElementById('human');
+        const elfCheckbox = document.getElementById('elf');
+        const dwarfCheckbox = document.getElementById('dwarf');
+        const generateDescCheckbox = document.getElementById('generateDesc');
+        const generateButton = document.getElementById('generateButton');
+        const numNamesSelect = document.getElementById('numNames');
+        const namePlace = document.getElementById('namePlace');
+        const syl1Elf = ["vay", "dor", "tra", "tor", "mir", "ven", "en", "ron", "kea", "cra", "hol", "mag", "vir", "luc", "sar", "pas", "rel", "gre", "hol", "cir"];
+        const syl2Elf = ["ro", "za", "ir", "th", "ax", "ph", "sh", "et", "ak", "al", "no", "hi", "em", "es", "um", "rl", "men", "le", "ri", "sa"];
+        const syl3Elf = ["van", "ren", "tor", "al", "en", "dor", "in", "ra", "tra", "na", "an", "ros", "ur", "in", "ir", "kas", "im", "ar", "or", "al"];
+        const last1Elf = ["dusk", "light", "silver", "gold", "dark", "night", "green", "brown", "lunar", "mind", "fir", "oak", "blue", "fog", "winter", "summer", "autumn", "spring", "wild", "star"];
+        const last2Elf = ["brook", "pride", "seeker", "weild", "ann", "ill", "bell", "dream", "burth", "walker", "whisper", "bloom", "blossom", "shard", "guard", "rint", "ant", "petal", "fate", "heel"];
+        const syl1Human = ["erl", "bed", "ran", "mar", "mon", "rain", "ver", "tir", "tam", "taw", "daw", "ray", "fel", "rob", "sha", "the", "nor", "cha", "an", "rav", "bri"];
+        const syl2Human = ["er", "den", "em", "ey", "ly", "ston", "on", "an", "en", "et", "ow", "ion", "un", "shaw", "ty", "yn", "ard", "ap", "man", "ger", "es", "or"];
+        const last1Human = ["thal", "hunts", "bed", "prset", "tin", "mad", "hal", "leav", "hold", "corn", "hard", "thay", "bur", "barr", "he", "clo", "beck", "beau", "wild", "dust"];
+        const last2Human = ["brook", "well", "ell", "ford", "ann", "ill", "bell", "itt", "burth", "ger", "and", "ery", "lor", "tch", "son", "rint", "ant", "skie", "ward", "ton"];
+        const syl1Dwarf = ["Th", "T", "k", "l", "dw", "d", "O", "a"];
+        const syl2Dwarf = ["a", "i", "an", "on"];
+        const syl3Dwarf = ["rick", "ick", "al", "oin", "ili", "don", "dan", "din"];
+        const last1Dwarf = ["storm", "fire", "hammer", "wind", "forge", "might", "long", "short", "gray", "red", "green"];
+        const last2Dwarf = ["forge", "und", "ind", "born", "storm", "sted", "ed", "led", "brand"];
+        const eye = ["blue eyes", "brown eyes", "hazel eyes", "silver eyes", "green eyes", "black eyes", "red eyes"];
+        const hair = ["dark brown", "light brown", "strawberry blonde", "dirty blonde", "platinum blonde", "black", "red"];
+        const heightft = ["4", "5", "6", "7"];
+        const heightin = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function generateElfName() {
+            const firstName = capitalizeFirstLetter(getRandomElement(syl1Elf)) + getRandomElement(syl2Elf) + getRandomElement(syl3Elf);
+            const lastName = capitalizeFirstLetter(getRandomElement(last1Elf)) + getRandomElement(last2Elf);
+            return `Elf Name: ${firstName} ${lastName}`;
+        }
+
+        function generateHumanName() {
+            const firstName = capitalizeFirstLetter(getRandomElement(syl1Human)) + getRandomElement(syl2Human);
+            const lastName = capitalizeFirstLetter(getRandomElement(last1Human)) + getRandomElement(last2Human);
+            return `Human Name: ${firstName} ${lastName}`;
+        }
+
+        function generateDwarfName() {
+            let firstName = getRandomElement(syl1Dwarf);
+            if (!['a', 'e', 'i', 'o', 'u'].includes(firstName.toLowerCase())) {
+                firstName += getRandomElement(syl2Dwarf);
+            }
+            firstName += getRandomElement(syl3Dwarf);
+
+            const lastName = capitalizeFirstLetter(getRandomElement(last1Dwarf)) + getRandomElement(last2Dwarf);
+            return `Dwarf Name: ${firstName} ${lastName}`;
+        }
+
+        function generateDescription(race) {
+            const generatedDescription = [];
+            if (generateDescCheckbox.checked) {
+                generatedDescription.push(`Eye Color: ${getRandomElement(eye)}`);
+                generatedDescription.push(`Hair Color: ${getRandomElement(hair)}`);
+                let heightDesc;
+                if (race === 'elf') {
+                    heightDesc = `Height: 6'${getRandomElement(heightin)}"`;
+                } else if (race === 'dwarf') {
+                    heightDesc = `Height: ${getRandomElement(heightft, dwarfCheckbox.checked)}'${getRandomElement(heightin)}"`;
+                } else {
+                    heightDesc = `Height: ${getRandomElement(heightft)}'${getRandomElement(heightin)}"`;
+                }
+                generatedDescription.push(heightDesc);
+            }
+            return generatedDescription;
+        }
+
+        function generateNames() {
+            namePlace.innerHTML = '';
+            const numNames = parseInt(numNamesSelect.value);
+
+            for (let i = 0; i < numNames; i++) {
+                if (humanCheckbox.checked) {
+                    const humanName = generateHumanName();
+                    const humanDesc = generateDescription('human');
+                    const humanNameElement = document.createElement('p');
+                    humanNameElement.className = 'name-with-desc';
+                    humanNameElement.textContent = humanName;
+                    namePlace.appendChild(humanNameElement);
+
+                    if (humanDesc.length > 0) {
+                        const descList = document.createElement('ul');
+                        for (const desc of humanDesc) {
+                            const descItem = document.createElement('li');
+                            descItem.textContent = desc;
+                            descList.appendChild(descItem);
+                        }
+                        namePlace.appendChild(descList);
+                    }
+                }
+
+                if (elfCheckbox.checked) {
+                    const elfName = generateElfName();
+                    const elfDesc = generateDescription('elf');
+                    const elfNameElement = document.createElement('p');
+                    elfNameElement.className = 'name-with-desc';
+                    elfNameElement.textContent = elfName;
+                    namePlace.appendChild(elfNameElement);
+
+                    if (elfDesc.length > 0) {
+                        const descList = document.createElement('ul');
+                        for (const desc of elfDesc) {
+                            const descItem = document.createElement('li');
+                            descItem.textContent = desc;
+                            descList.appendChild(descItem);
+                        }
+                        namePlace.appendChild(descList);
+                    }
+                }
+
+                if (dwarfCheckbox.checked) {
+                    const dwarfName = generateDwarfName();
+                    const dwarfDesc = generateDescription('dwarf');
+                    const dwarfNameElement = document.createElement('p');
+                    dwarfNameElement.className = 'name-with-desc';
+                    dwarfNameElement.textContent = dwarfName;
+                    namePlace.appendChild(dwarfNameElement);
+
+                    if (dwarfDesc.length > 0) {
+                        const descList = document.createElement('ul');
+                        for (const desc of dwarfDesc) {
+                            const descItem = document.createElement('li');
+                            descItem.textContent = desc;
+                            descList.appendChild(descItem);
+                        }
+                        namePlace.appendChild(descList);
+                    }
+                }
+            }
+
+        }
+
+        generateButton.addEventListener('click', generateNames);</script>
+</body>
+</html>
