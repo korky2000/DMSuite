@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loot Generator</title>
+    <style>
+        /* css eventually */
+    </style>
+</head>
+<body>
+    <h1>Loot Generator</h1>
+
+    <button id="generateButton">Generate Loot</button>
+
+    <div id="lootGenerated">
+        <!-- loot will go here at some point (maybe inline???) -->
+    </div>
+
+    <script>const coins = ["bronze", "silver", "gold", "platinum"];
+        const jewels = ["emerald", "jade", "ruby", "peridot", "diamond", "opal", "garnet"];
+        const commonMagic = ["potion of growth", "potion of poison", "potion of water breathing", "potion of jumping", "immovable rod", "staff of the python", "bag of holding", "bag of tricks", "cloak of elvenkind", "bag of tricks", "winged boots"];
+        const rareMagic = ["ring of evasion", "ring of feather falling", "ring of xray vision", "tentacle rod", "staff of healing"];
+        const veryRareMagic = ["rod of absorption", "potion of speed", "+5 sword", "carpet of flying", "robe of stars"];
+        const legendaryMagic = ["potion of giant strength", "rod of resurrection", "vorpal sword", "iron flask", "cubic gate", "cloak of invisibility"];
+        const miscLoot = ["a token of a god", "a small animal statue", "a pouch of lavender", "a pouch of rosemary", "an empty leather pouch", "an unused journal", "a fork", "a pewter bell", "a dull knife", "a brass ring", "an iron ring", "a gold ring", "a brass bracelet", "a leather cord", "a wooden slingshot with some iron pellets"];
+
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        document.getElementById('generateButton').addEventListener('click', function () {
+            const generatedCoins1 = getRandomElement(coins);
+            const generatedCoins2 = getRandomElement(coins);
+            const randomNumberOfCoins1 = Math.floor(Math.random() * 5) + 1; // Random number between 1 and 5
+            const randomNumberOfCoins2 = Math.floor(Math.random() * 5) + 1; // Random number between 1 and 5
+
+            const lootGeneratedDiv = document.getElementById('lootGenerated');
+            lootGeneratedDiv.innerHTML = `
+                    <p>Coins: ${randomNumberOfCoins1} ${generatedCoins1}, ${randomNumberOfCoins2} ${generatedCoins2}</p>
+                `;
+        });</script>
+</body>
+</html>
