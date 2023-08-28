@@ -10,7 +10,7 @@ Tavern Generator (Prototype Done)
 
 NPC Generator (in progress)
 
-Loot Generator
+Loot Generator (in progress)
 
 Random Encounter Generator
 
