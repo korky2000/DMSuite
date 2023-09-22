@@ -14,6 +14,8 @@ Loot Generator (in progress)
 
 Random Encounter Generator
 
+PC tracker (in progress)
+
 NPC Tracker (will need to use SQL for this ew) (Shows which quest lines are given by which NPCs, Which NPCs run shops, where each NPC is located, which player has met which NPC etc...) (This one will take a hot minute to make lmao)
 
 Some more notes
