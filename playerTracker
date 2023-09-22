@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Character Tracker</title>
+    <style>
+        .order {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        body {
+            background-color: #E9F5DB;
+        }
+
+        .heading {
+            background-color: #718355;
+            color: #1E1E24;
+            padding: 30px 30px;
+            text-align: center;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            margin: 15px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: row;
+        }
+        .navChild{
+            padding:15px;
+        }
+
+
+        .screen {
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: center;
+            align-content: center;
+            flex-flow: column wrap;
+            background-color: #97A97C;
+            color: #1E1E24;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        .room{
+            padding: 10px;
+        }
+
+        .center {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        #characterDisplay {
+            background-color: white;
+            color: black;
+            padding: 30px 30px;
+            text-align: center;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+    </style>
+</head>
+<nav>
+    <div class="nav">
+    <h4>Saved Parties</h4>
+    <div class="order, navChild" id="orderList"></div>
+</div>
+</nav>
+<body>
+    <div class="heading">
+        <form id="pcTrack">
+            <div class="room">
+            <label for="characterName">Character Name:</label>
+            <input type="text" id="characterName" required>
+            <label for="AC">AC:</label>
+            <input type="number" id="AC" required>
+            <label for="race">Race:</label>
+            <input type="text" id="race" />
+            <label for="HP">HP:</label>
+            <input type="number" id="HP" /><br />
+                </div>
+            <div class="room">
+            <button type="submit">Submit</button>
+                </div>
+        </form>
+       
+        </div>
+    <div id="characterDisplay" class="room">
+        <div id="characterDetails"></div> <!-- Updated div for displaying character details -->
+    </div>
+    <div class="center">
+        <div class="room">
+            <input type="text" id="partyName" placeholder="Party Name"></br> <!-- i'm keeping this break in here even though i don't need it-->
+        </div>
+        <div class="room">
+            <button id="saveButton">Save Party</button>
+        </div>
+        <div class="room">
+            <button id="removePartiesButton">Clear Parties</button>
+        </div>
+
+    </div>
+
+    <script>const form = document.getElementById('pcTrack');
+        const orderList = document.getElementById('orderList');
+        const saveButton = document.getElementById('saveButton');
+
+        const partyNameInput = document.getElementById('partyName');
+        const characterDetails = document.getElementById('characterDetails');
+        const submissions = [];
+        let partySaves = JSON.parse(localStorage.getItem('partySaves')) || [];
+
+        // Load saved parties when the page loads
+
+        updateOrderList();
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const characterName = document.getElementById('characterName').value;
+            const race = document.getElementById('race').value;
+            const HP = document.getElementById('HP').value;
+            const AC = document.getElementById('AC').value;
+
+            const submission = {
+                characterName,
+                race,
+                HP,
+                AC
+            };
+
+            submissions.push(submission);
+            form.reset();
+            updateCharacterDetails();
+        });
+
+        saveButton.addEventListener('click', function () {
+            const partyName = partyNameInput.value;
+            if (partyName.trim() === '') {
+                alert('Please enter a party name before saving.');
+                return;
+            }
+
+            const save = {
+                partyName,
+                characters: [...submissions]
+            };
+
+            partySaves.push(save);
+            submissions.length = 0;
+            partyNameInput.value = '';
+
+            // Save the updated partySaves to localStorage
+            localStorage.setItem('partySaves', JSON.stringify(partySaves));
+
+            updateOrderList();
+            alert('Party saved successfully!');
+        });
+
+        const removePartiesButton = document.getElementById('removePartiesButton');
+        removePartiesButton.addEventListener('click', function () {
+            // Clear localStorage when the button is clicked
+            localStorage.clear();
+            // Also clear the partySaves array to reflect the changes in the UI
+            partySaves = [];
+            updateOrderList();
+        });
+        function updateOrderList() {
+            orderList.innerHTML = '';
+
+            partySaves.forEach((save, saveIndex) => {
+                const saveDiv = document.createElement('div');
+                saveDiv.innerHTML = `
+                            <strong>${save.partyName}</strong><br>
+                            <button onclick="loadParty(${saveIndex})">Load Party</button><br><br>
+                        `;
+                orderList.appendChild(saveDiv);
+            });
+        }
+
+        function updateCharacterDetails() {
+            characterDetails.innerHTML = '';
+
+            submissions.forEach((character, index) => {
+                const characterDiv = document.createElement('div');
+                characterDiv.innerHTML = `
+                            <strong>${character.characterName}</strong><br>
+                            Race: ${character.race}<br>
+                            HP: ${character.HP}<br>
+                            AC: ${character.AC}<br><br>
+                        `;
+                characterDetails.appendChild(characterDiv);
+            });
+        }
+
+        function loadParty(saveIndex) {
+            const save = partySaves[saveIndex];
+            submissions.length = 0;
+            partyNameInput.value = '';
+
+            characterDetails.innerHTML = '';
+
+            save.characters.forEach((character) => {
+                submissions.push(character);
+            });
+
+            updateCharacterDetails();
+        }</script>
+</body>
+</html>
