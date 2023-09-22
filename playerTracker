@@ -4,130 +4,157 @@
     <meta charset="utf-8" />
     <title>Character Tracker</title>
     <style>
-        .order {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            display: flex;
-            flex-direction: row;
-        }
-
-        .error {
-            color: red;
-            font-weight: bold;
-        }
-
         body {
+            font-family: Arial, sans-serif;
             background-color: #E9F5DB;
+            margin: 0;
+            padding: 0;
         }
 
-        .heading {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
             background-color: #718355;
             color: #1E1E24;
-            padding: 30px 30px;
-            text-align: center;
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-            margin: 15px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
         }
 
         .nav {
             display: flex;
-            flex-direction: row;
-        }
-        .navChild{
-            padding:15px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
         }
 
+            .nav h4 {
+                margin: 0;
+                font-weight: bold;
+            }
 
-        .screen {
-            display: flex;
-            flex-direction: column-reverse;
-            justify-content: center;
-            align-content: center;
-            flex-flow: column wrap;
-            background-color: #97A97C;
-            color: #1E1E24;
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 30px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            .nav a {
+                text-decoration: none;
+                color: #333;
+                font-weight: bold;
+            }
+
+                .nav a:hover {
+                    color: #718355;
+                }
+
+        .main-content {
+            padding: 20px 0;
         }
-        .room{
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            background-color: #718355;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button[type="submit"]:hover {
+                background-color: #97A97C;
+            }
+
+        .character-details {
+            border: 1px solid #ccc;
             padding: 10px;
         }
 
-        .center {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 30px;
-            padding-top: 15px;
-            padding-bottom: 15px;
+        .party-dropdown {
+            margin-top: 20px;
         }
 
-        #characterDisplay {
-            background-color: white;
-            color: black;
-            padding: 30px 30px;
-            text-align: center;
-            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-        }
+            .party-dropdown select {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+            }
     </style>
 </head>
-<nav>
-    <div class="nav">
-    <h4>Saved Parties</h4>
-    <div class="order, navChild" id="orderList"></div>
-</div>
-</nav>
 <body>
-    <div class="heading">
-        <form id="pcTrack">
-            <div class="room">
-            <label for="characterName">Character Name:</label>
-            <input type="text" id="characterName" required>
-            <label for="AC">AC:</label>
-            <input type="number" id="AC" required>
-            <label for="race">Race:</label>
-            <input type="text" id="race" />
-            <label for="HP">HP:</label>
-            <input type="number" id="HP" /><br />
+    <div class="container">
+        <header class="header">
+            <h1>Character Tracker</h1>
+        </header>
+        <nav class="nav">
+            <div class="party-dropdown">
+                <strong><label for="partyDropdown">Load Parties:</label></strong>
+                <select id="partyDropdown"></select>
+                <button id="loadPartyButton">Load Party</button>
+            </div>            <a href="#" id="removePartiesButton">Clear Parties</a>
+        </nav>
+        <main class="main-content">
+            <form id="pcTrack">
+                <div class="form-group">
+                    <label for="characterName" class="form-label">Character Name:</label>
+                    <input type="text" id="characterName" required>
                 </div>
-            <div class="room">
-            <button type="submit">Submit</button>
+                <div class="form-group">
+                    <label for="AC" class="form-label">AC:</label>
+                    <input type="number" id="AC" required>
                 </div>
-        </form>
-       
-        </div>
-    <div id="characterDisplay" class="room">
-        <div id="characterDetails"></div> <!-- Updated div for displaying character details -->
-    </div>
-    <div class="center">
-        <div class="room">
-            <input type="text" id="partyName" placeholder="Party Name"></br> <!-- i'm keeping this break in here even though i don't need it-->
-        </div>
-        <div class="room">
-            <button id="saveButton">Save Party</button>
-        </div>
-        <div class="room">
-            <button id="removePartiesButton">Clear Parties</button>
-        </div>
-
+                <div class="form-group">
+                    <label for="race" class="form-label">Race:</label>
+                    <input type="text" id="race">
+                </div>
+                <div class="form-group">
+                    <label for="HP" class="form-label">HP:</label>
+                    <input type="number" id="HP">
+                </div>
+                <div class="form-group">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+            <div class="character-details" id="characterDetails"></div>
+            
+        </main>
     </div>
 
     <script>const form = document.getElementById('pcTrack');
-        const orderList = document.getElementById('orderList');
-        const saveButton = document.getElementById('saveButton');
-
-        const partyNameInput = document.getElementById('partyName');
         const characterDetails = document.getElementById('characterDetails');
+        const partyDropdown = document.getElementById('partyDropdown');
+        const loadPartyButton = document.getElementById('loadPartyButton');
         const submissions = [];
         let partySaves = JSON.parse(localStorage.getItem('partySaves')) || [];
-
-        // Load saved parties when the page loads
-
-        updateOrderList();
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -148,77 +175,75 @@
             updateCharacterDetails();
         });
 
-        saveButton.addEventListener('click', function () {
-            const partyName = partyNameInput.value;
-            if (partyName.trim() === '') {
-                alert('Please enter a party name before saving.');
-                return;
-            }
-
-            const save = {
-                partyName,
-                characters: [...submissions]
-            };
-
-            partySaves.push(save);
-            submissions.length = 0;
-            partyNameInput.value = '';
-
-            // Save the updated partySaves to localStorage
-            localStorage.setItem('partySaves', JSON.stringify(partySaves));
-
-            updateOrderList();
-            alert('Party saved successfully!');
-        });
-
-        const removePartiesButton = document.getElementById('removePartiesButton');
-        removePartiesButton.addEventListener('click', function () {
-            // Clear localStorage when the button is clicked
-            localStorage.clear();
-            // Also clear the partySaves array to reflect the changes in the UI
-            partySaves = [];
-            updateOrderList();
-        });
-        function updateOrderList() {
-            orderList.innerHTML = '';
-
-            partySaves.forEach((save, saveIndex) => {
-                const saveDiv = document.createElement('div');
-                saveDiv.innerHTML = `
-                            <strong>${save.partyName}</strong><br>
-                            <button onclick="loadParty(${saveIndex})">Load Party</button><br><br>
-                        `;
-                orderList.appendChild(saveDiv);
-            });
-        }
-
         function updateCharacterDetails() {
             characterDetails.innerHTML = '';
 
             submissions.forEach((character, index) => {
                 const characterDiv = document.createElement('div');
                 characterDiv.innerHTML = `
-                            <strong>${character.characterName}</strong><br>
-                            Race: ${character.race}<br>
-                            HP: ${character.HP}<br>
-                            AC: ${character.AC}<br><br>
-                        `;
+                                <strong>${character.characterName}</strong><br>
+                                Race: ${character.race}<br>
+                                HP: ${character.HP}<br>
+                                AC: ${character.AC}<br><br>
+                            `;
                 characterDetails.appendChild(characterDiv);
             });
         }
 
-        function loadParty(saveIndex) {
-            const save = partySaves[saveIndex];
-            submissions.length = 0;
-            partyNameInput.value = '';
+        function saveParty() {
+            const partyName = prompt('Enter a name for the party:');
+            if (partyName) {
+                const save = {
+                    partyName,
+                    characters: [...submissions]
+                };
 
-            characterDetails.innerHTML = '';
+                partySaves.push(save);
+                submissions.length = 0;
 
-            save.characters.forEach((character) => {
-                submissions.push(character);
+                localStorage.setItem('partySaves', JSON.stringify(partySaves));
+
+                updatePartyDropdown();
+                alert('Party saved successfully!');
+            }
+        }
+
+        function updatePartyDropdown() {
+            partyDropdown.innerHTML = '<option value="">Select a Party</option>';
+
+            partySaves.forEach((save, saveIndex) => {
+                const partyOption = document.createElement('option');
+                partyOption.value = saveIndex;
+                partyOption.textContent = save.partyName;
+                partyDropdown.appendChild(partyOption);
             });
+        }
 
-            updateCharacterDetails();
-        }</script>
+        function loadParty() {
+            const selectedPartyIndex = partyDropdown.value;
+            if (selectedPartyIndex !== '') {
+                const save = partySaves[selectedPartyIndex];
+                submissions.length = 0;
+
+                characterDetails.innerHTML = '';
+
+                save.characters.forEach((character) => {
+                    submissions.push(character);
+                });
+
+                updateCharacterDetails();
+                alert('Party loaded successfully!');
+            }
+        }
+
+        function clearParties() {
+            localStorage.clear();
+            partySaves = [];
+            updatePartyDropdown();
+        }
+
+        updatePartyDropdown();
+        loadPartyButton.addEventListener('click', loadParty);
+        document.getElementById('removePartiesButton').addEventListener('click', clearParties);</script>
 </body>
 </html>
